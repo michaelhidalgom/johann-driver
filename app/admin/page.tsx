@@ -113,6 +113,13 @@ export default function AdminPage() {
             <span className="text-slate-400 text-xs uppercase tracking-[0.15em]">Panel de administración</span>
           </div>
           <div className="flex items-center gap-6">
+            <a
+              href="/admin/reservas"
+              className="text-xs font-bold uppercase tracking-[0.15em] text-slate-400 hover:text-[#C5A059] transition flex items-center gap-2"
+            >
+              <i className="fa-solid fa-calendar-days text-xs" />
+              Pre-Reservas
+            </a>
             <span className="text-slate-400 text-xs hidden md:block">{userEmail}</span>
             <button
               onClick={handleLogout}
