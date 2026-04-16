@@ -38,7 +38,9 @@ export default function ReservasSection() {
   const labelClass = "block text-[10px] uppercase font-bold tracking-[0.1em] text-slate-500 mb-2"
 
   return (
-    <section id="reservas" className="py-32 bg-slate-50 border-y border-slate-200 scroll-mt-20">
+    // <section id="reservas" className="py-32 bg-slate-50 border-y border-slate-200 scroll-mt-20">
+    //<section id="reservas" className="bg-slate-50 py-16 scroll-mt-28 relative">
+    <section id="reservas" className="bg-slate-50 py-12 scroll-mt-16 relative">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
 
