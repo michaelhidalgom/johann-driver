@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  --gold: #C5A059;
+  --navy: #0A192F;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  scroll-behavior: smooth;
+  background-color: #ffffff;
+}
+
+.gold-text { color: var(--gold); }
+.gold-bg { background-color: var(--gold); }
+
+.hero-section {
+  position: relative;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(10,25,47,0.4) 0%,
+    rgba(10,25,47,0.7) 55%,
+    rgba(10,25,47,0.9) 100%
+  ), url('/atlanta-skyline.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.chevron-wrap { display: flex; flex-direction: column; align-items: center; }
+
+.chevron-wrap i:first-child {
+  animation: chevronBounce 1.4s ease-in-out infinite;
+  color: var(--gold);
+  opacity: 0.5;
+  font-size: 18px;
+}
+
+.chevron-wrap i:last-child {
+  animation: chevronBounce 1.4s 0.2s ease-in-out infinite;
+  color: var(--gold);
+  opacity: 0.9;
+  font-size: 18px;
+  margin-top: -6px;
+}
+
+@keyframes chevronBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
