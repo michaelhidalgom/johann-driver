@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
 export default function ReservasSection() {
+  const [nombre,   setNombre]   = useState('')
   const [origen,   setOrigen]   = useState('')
   const [destino,  setDestino]  = useState('')
   const [fecha,    setFecha]    = useState('')
@@ -14,8 +15,8 @@ export default function ReservasSection() {
   const [formState, setFormState] = useState<FormState>('idle')
 
   const camposCompletos =
-    origen.trim() && destino.trim() && fecha && hora &&
-    telefono.trim() && correo.trim()
+    nombre.trim() && origen.trim() && destino.trim() &&
+    fecha && hora && telefono.trim() && correo.trim()
 
   async function handleSubmit() {
     if (!camposCompletos) return
@@ -23,13 +24,13 @@ export default function ReservasSection() {
 
     const { error } = await supabase
       .from('prereservas')
-      .insert([{ origen, destino, fecha, hora, telefono, correo, estado: 'pendiente' }])
+      .insert([{ nombre, origen, destino, fecha, hora, telefono, correo, estado: 'pendiente' }])
 
     setFormState(error ? 'error' : 'success')
   }
 
   function handleReset() {
-    setOrigen(''); setDestino(''); setFecha('')
+    setNombre(''); setOrigen(''); setDestino(''); setFecha('')
     setHora(''); setTelefono(''); setCorreo('')
     setFormState('idle')
   }
@@ -38,8 +39,6 @@ export default function ReservasSection() {
   const labelClass = "block text-[10px] uppercase font-bold tracking-[0.1em] text-slate-500 mb-2"
 
   return (
-    // <section id="reservas" className="py-32 bg-slate-50 border-y border-slate-200 scroll-mt-20">
-    //<section id="reservas" className="bg-slate-50 py-16 scroll-mt-28 relative">
     <section id="reservas" className="bg-slate-50 py-12 scroll-mt-16 relative">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
@@ -58,8 +57,8 @@ export default function ReservasSection() {
 
             <div className="space-y-6 border-t border-slate-200 pt-8">
               {[
-                { icon: 'fa-solid fa-phone',       text: '+1 (404) 000-0000' },
-                { icon: 'fa-brands fa-whatsapp',   text: 'Atención directa por WhatsApp' },
+                { icon: 'fa-solid fa-phone',     text: '+1 (404) 000-0000' },
+                { icon: 'fa-brands fa-whatsapp', text: 'Atención directa por WhatsApp' },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-lg border border-slate-200 bg-white flex items-center justify-center text-[#C5A059] shadow-sm">
@@ -76,8 +75,8 @@ export default function ReservasSection() {
               </span>
               <div className="flex flex-wrap items-center gap-6">
                 {[
-                  { icon: 'fa-solid fa-money-bill-1-wave', label: 'Efectivo' },
-                  { icon: 'fa-solid fa-credit-card',       label: 'Tarjeta' },
+                  { icon: 'fa-solid fa-money-bill-1-wave',    label: 'Efectivo' },
+                  { icon: 'fa-solid fa-credit-card',          label: 'Tarjeta' },
                   { icon: 'fa-solid fa-mobile-screen-button', label: 'Zelle / App' },
                 ].map((p) => (
                   <div key={p.label} className="flex items-center gap-2 text-slate-600 font-medium text-sm">
@@ -93,7 +92,6 @@ export default function ReservasSection() {
           <div className="bg-white rounded-2xl border border-slate-100 p-10 md:p-14 shadow-xl">
 
             {formState === 'success' ? (
-              /* ── Estado éxito ── */
               <div className="flex flex-col items-center text-center py-6">
                 <div className="w-16 h-16 rounded-full bg-[#C5A059]/10 flex items-center justify-center mb-6">
                   <i className="fa-solid fa-check text-[#C5A059] text-2xl" />
@@ -121,6 +119,18 @@ export default function ReservasSection() {
                 </p>
 
                 <div className="space-y-5">
+
+                  {/* Nombre */}
+                  <div>
+                    <label className={labelClass}>Nombre Completo</label>
+                    <input
+                      type="text"
+                      placeholder="Ej: Carlos Reyes"
+                      value={nombre}
+                      onChange={(e) => setNombre(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
 
                   {/* Origen */}
                   <div>

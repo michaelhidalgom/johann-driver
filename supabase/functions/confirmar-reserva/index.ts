@@ -6,29 +6,31 @@ const FROM_NAME      = 'Johann Garcia Personal Driver'
 
 serve(async (req) => {
   try {
-    const body = await req.json()
-
-    // El webhook de Supabase envía los datos en body.record
+    const body    = await req.json()
     const reserva = body.record
 
-    // Solo actuar cuando el estado cambia a 'aceptada'
     if (reserva.estado !== 'aceptada') {
       return new Response(JSON.stringify({ message: 'No action needed' }), { status: 200 })
     }
 
-    // Formatear fecha y hora
+    // Formatear fecha
     const fecha = new Date(reserva.fecha + 'T00:00:00').toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year:    'numeric',
-      month:   'long',
-      day:     'numeric',
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     })
 
-    const [h, m]  = reserva.hora.split(':').map(Number)
-    const ampm    = h >= 12 ? 'PM' : 'AM'
-    const hora    = `${h % 12 || 12}:${String(m).padStart(2, '0')} ${ampm}`
+    // Formatear hora
+    const [h, m] = reserva.hora.split(':').map(Number)
+    const ampm   = h >= 12 ? 'PM' : 'AM'
+    const hora   = `${h % 12 || 12}:${String(m).padStart(2, '0')} ${ampm}`
 
-    // HTML del correo
+    // Formatear monto
+    const montoFormateado = reserva.monto
+      ? `$${parseFloat(reserva.monto).toFixed(2)} USD`
+      : null
+
+    // Nombre del cliente
+    const nombreCliente = reserva.nombre?.trim() || reserva.correo
+
     const html = `
 <!DOCTYPE html>
 <html lang="es">
@@ -59,7 +61,7 @@ serve(async (req) => {
           <tr>
             <td style="padding:32px 40px 0;">
               <p style="margin:0;font-size:15px;color:#334155;line-height:1.7;">
-                Estimado/a <strong>${reserva.nombre}</strong>,
+                Estimado/a <strong>${nombreCliente}</strong>,
               </p>
               <p style="margin:12px 0 0;font-size:14px;color:#64748b;line-height:1.7;font-weight:300;">
                 Nos complace confirmar que su pre-reserva ha sido <strong style="color:#10b981;">aceptada</strong>.
@@ -92,11 +94,18 @@ serve(async (req) => {
                   </td>
                 </tr>
                 <tr>
-                  <td style="padding:16px 20px;">
+                  <td style="padding:16px 20px;${montoFormateado ? 'border-bottom:1px solid #e2e8f0;' : ''}">
                     <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Hora</p>
                     <p style="margin:4px 0 0;font-size:14px;color:#1e293b;font-weight:600;">${hora}</p>
                   </td>
                 </tr>
+                ${montoFormateado ? `
+                <tr>
+                  <td style="padding:16px 20px;background:#f0fdf4;">
+                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Monto del Servicio</p>
+                    <p style="margin:4px 0 0;font-size:18px;color:#10b981;font-weight:700;">${montoFormateado}</p>
+                  </td>
+                </tr>` : ''}
               </table>
             </td>
           </tr>
@@ -135,7 +144,6 @@ serve(async (req) => {
 </body>
 </html>`
 
-    // Enviar correo via Resend
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {

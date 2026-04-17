@@ -9,13 +9,15 @@ type Estado = 'pendiente' | 'aceptada' | 'rechazada'
 type Prereserva = {
   id: number
   created_at: string
+  nombre: string
   origen: string
   destino: string
-  fecha: string   // 'YYYY-MM-DD'
-  hora: string    // 'HH:MM'
+  fecha: string
+  hora: string
   telefono: string
   correo: string
   estado: Estado
+  monto: number | null
 }
 
 // ─── Helpers ──────────────────────────────────────────────────
@@ -49,14 +51,18 @@ function formatHora(hora: string) {
 export default function AdminReservasPage() {
   const router = useRouter()
 
-  const hoy   = new Date()
-  const [anio, setAnio]   = useState(hoy.getFullYear())
-  const [mes,  setMes]    = useState(hoy.getMonth())       // 0-11
+  const hoy  = new Date()
+  const [anio, setAnio] = useState(hoy.getFullYear())
+  const [mes,  setMes]  = useState(hoy.getMonth())
   const [prereservas, setPrereservas] = useState<Prereserva[]>([])
   const [loading,     setLoading]     = useState(true)
   const [seleccionada, setSeleccionada] = useState<Prereserva | null>(null)
   const [procesando,   setProcesando]   = useState(false)
   const [userEmail,    setUserEmail]    = useState('')
+
+  // Estado para el flujo de aceptar con monto
+  const [confirmandoAceptar, setConfirmandoAceptar] = useState(false)
+  const [montoInput, setMontoInput] = useState('')
 
   // ── Cargar datos ──
   useEffect(() => {
@@ -79,15 +85,43 @@ export default function AdminReservasPage() {
     setLoading(false)
   }
 
-  // ── Cambiar estado ──
-  async function cambiarEstado(id: number, nuevoEstado: Estado) {
+  // ── Aceptar con monto ──
+  async function handleAceptar() {
+    if (!seleccionada || !montoInput) return
+    const monto = parseFloat(montoInput)
+    if (isNaN(monto) || monto <= 0) return
+
     setProcesando(true)
-    await supabase.from('prereservas').update({ estado: nuevoEstado }).eq('id', id)
+    await supabase
+      .from('prereservas')
+      .update({ estado: 'aceptada', monto })
+      .eq('id', seleccionada.id)
+
     setPrereservas(prev =>
-      prev.map(p => p.id === id ? { ...p, estado: nuevoEstado } : p)
+      prev.map(p => p.id === seleccionada.id ? { ...p, estado: 'aceptada', monto } : p)
     )
-    setSeleccionada(prev => prev?.id === id ? { ...prev, estado: nuevoEstado } : prev)
+    setSeleccionada(prev => prev ? { ...prev, estado: 'aceptada', monto } : prev)
+    setConfirmandoAceptar(false)
+    setMontoInput('')
     setProcesando(false)
+  }
+
+  // ── Rechazar ──
+  async function handleRechazar(id: number) {
+    setProcesando(true)
+    await supabase.from('prereservas').update({ estado: 'rechazada' }).eq('id', id)
+    setPrereservas(prev =>
+      prev.map(p => p.id === id ? { ...p, estado: 'rechazada' } : p)
+    )
+    setSeleccionada(prev => prev?.id === id ? { ...prev, estado: 'rechazada' } : prev)
+    setProcesando(false)
+  }
+
+  // ── Cerrar modal ──
+  function handleCerrarModal() {
+    setSeleccionada(null)
+    setConfirmandoAceptar(false)
+    setMontoInput('')
   }
 
   // ── Cerrar sesión ──
@@ -107,12 +141,10 @@ export default function AdminReservasPage() {
   }
 
   // ── Construcción del calendario ──
-  const primerDia    = new Date(anio, mes, 1).getDay()   // 0=Dom
-  const diasEnMes    = new Date(anio, mes + 1, 0).getDate()
-  const celdas       = primerDia + diasEnMes             // celdas totales
-  const filasNeeded  = Math.ceil(celdas / 7)
+  const primerDia   = new Date(anio, mes, 1).getDay()
+  const diasEnMes   = new Date(anio, mes + 1, 0).getDate()
+  const filasNeeded = Math.ceil((primerDia + diasEnMes) / 7)
 
-  // Prereservas del mes actual indexadas por día
   const porDia: Record<number, Prereserva[]> = {}
   prereservas.forEach(p => {
     const d = new Date(p.fecha + 'T00:00:00')
@@ -123,7 +155,6 @@ export default function AdminReservasPage() {
     }
   })
 
-  // Conteos globales
   const conteo = {
     pendiente: prereservas.filter(p => p.estado === 'pendiente').length,
     aceptada:  prereservas.filter(p => p.estado === 'aceptada').length,
@@ -131,6 +162,9 @@ export default function AdminReservasPage() {
   }
 
   const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`
+
+  const inputClass = "w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059] transition-all"
+  const labelClass = "block text-[10px] uppercase font-bold tracking-[0.1em] text-slate-500 mb-2"
 
   // ─────────────────────────────────────────────────────────────
   return (
@@ -183,35 +217,22 @@ export default function AdminReservasPage() {
         {/* ── Calendario ── */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
 
-          {/* Navegación del mes */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
-            <button
-              onClick={mesAnterior}
-              className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:border-[#C5A059] hover:text-[#C5A059] transition"
-            >
+            <button onClick={mesAnterior} className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:border-[#C5A059] hover:text-[#C5A059] transition">
               <i className="fa-solid fa-chevron-left text-xs" />
             </button>
-            <h2 className="font-bold text-slate-800 text-lg">
-              {MESES[mes]} {anio}
-            </h2>
-            <button
-              onClick={mesSiguiente}
-              className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:border-[#C5A059] hover:text-[#C5A059] transition"
-            >
+            <h2 className="font-bold text-slate-800 text-lg">{MESES[mes]} {anio}</h2>
+            <button onClick={mesSiguiente} className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:border-[#C5A059] hover:text-[#C5A059] transition">
               <i className="fa-solid fa-chevron-right text-xs" />
             </button>
           </div>
 
-          {/* Cabecera días de la semana */}
           <div className="grid grid-cols-7 border-b border-slate-100">
             {DIAS.map(d => (
-              <div key={d} className="py-3 text-center text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">
-                {d}
-              </div>
+              <div key={d} className="py-3 text-center text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">{d}</div>
             ))}
           </div>
 
-          {/* Grilla de días */}
           {loading ? (
             <div className="flex justify-center py-20">
               <div className="w-8 h-8 border-4 border-slate-200 border-t-[#C5A059] rounded-full animate-spin" />
@@ -219,43 +240,26 @@ export default function AdminReservasPage() {
           ) : (
             <div className="grid grid-cols-7">
               {Array.from({ length: filasNeeded * 7 }).map((_, idx) => {
-                const dia = idx - primerDia + 1
-                const esValido  = dia >= 1 && dia <= diasEnMes
+                const dia        = idx - primerDia + 1
+                const esValido   = dia >= 1 && dia <= diasEnMes
                 const fechaCelda = `${anio}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`
-                const esHoy     = esValido && fechaCelda === hoyStr
-                const reservas  = esValido ? (porDia[dia] ?? []) : []
-                const MAX_DOTS  = 3
+                const esHoy      = esValido && fechaCelda === hoyStr
+                const reservas   = esValido ? (porDia[dia] ?? []) : []
+                const MAX_DOTS   = 3
 
                 return (
-                  <div
-                    key={idx}
-                    className={`min-h-[100px] p-2 border-b border-r border-slate-100 ${
-                      !esValido ? 'bg-slate-50/50' : 'hover:bg-slate-50 transition'
-                    }`}
-                  >
+                  <div key={idx} className={`min-h-[100px] p-2 border-b border-r border-slate-100 ${!esValido ? 'bg-slate-50/50' : 'hover:bg-slate-50 transition'}`}>
                     {esValido && (
                       <>
-                        {/* Número del día */}
-                        <div className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold mb-1 ${
-                          esHoy
-                            ? 'bg-[#C5A059] text-white'
-                            : 'text-slate-600'
-                        }`}>
+                        <div className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold mb-1 ${esHoy ? 'bg-[#C5A059] text-white' : 'text-slate-600'}`}>
                           {dia}
                         </div>
-
-                        {/* Reservas del día */}
                         <div className="space-y-1">
                           {reservas.slice(0, MAX_DOTS).map(r => (
-                            <button
-                              key={r.id}
-                              onClick={() => setSeleccionada(r)}
-                              className="w-full text-left"
-                            >
+                            <button key={r.id} onClick={() => { setSeleccionada(r); setConfirmandoAceptar(false); setMontoInput('') }} className="w-full text-left">
                               <div className={`flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-bold truncate ${
                                 r.estado === 'pendiente' ? 'bg-amber-50 text-amber-700' :
-                                r.estado === 'aceptada'  ? 'bg-emerald-50 text-emerald-700' :
-                                                           'bg-red-50 text-red-500'
+                                r.estado === 'aceptada'  ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-500'
                               }`}>
                                 <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${DOT[r.estado]}`} />
                                 {formatHora(r.hora)} · {r.origen.split(' ')[0]}
@@ -263,9 +267,7 @@ export default function AdminReservasPage() {
                             </button>
                           ))}
                           {reservas.length > MAX_DOTS && (
-                            <p className="text-[10px] text-slate-400 pl-1">
-                              +{reservas.length - MAX_DOTS} más
-                            </p>
+                            <p className="text-[10px] text-slate-400 pl-1">+{reservas.length - MAX_DOTS} más</p>
                           )}
                         </div>
                       </>
@@ -289,16 +291,16 @@ export default function AdminReservasPage() {
 
       </main>
 
-      {/* ── Modal detalle de pre-reserva ── */}
+      {/* ── Modal ── */}
       {seleccionada && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center px-4"
           style={{ backgroundColor: 'rgba(10,25,47,0.6)', backdropFilter: 'blur(4px)' }}
-          onClick={(e) => { if (e.target === e.currentTarget) setSeleccionada(null) }}
+          onClick={(e) => { if (e.target === e.currentTarget) handleCerrarModal() }}
         >
           <div className="bg-white rounded-2xl border border-slate-100 shadow-2xl w-full max-w-md p-10">
 
-            {/* Cabecera modal */}
+            {/* Cabecera */}
             <div className="flex items-start justify-between mb-8">
               <div>
                 <span className="text-xs uppercase font-bold tracking-[0.3em] text-[#C5A059] mb-2 block">
@@ -308,10 +310,7 @@ export default function AdminReservasPage() {
                   {LABEL[seleccionada.estado]}
                 </span>
               </div>
-              <button
-                onClick={() => setSeleccionada(null)}
-                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-slate-300 hover:text-slate-600 transition"
-              >
+              <button onClick={handleCerrarModal} className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:border-slate-300 hover:text-slate-600 transition">
                 <i className="fa-solid fa-xmark text-sm" />
               </button>
             </div>
@@ -319,12 +318,14 @@ export default function AdminReservasPage() {
             {/* Detalle */}
             <div className="space-y-4 mb-8">
               {[
-                { icon: 'fa-solid fa-location-dot',        label: 'Origen',   value: seleccionada.origen },
-                { icon: 'fa-solid fa-flag-checkered',      label: 'Destino',  value: seleccionada.destino },
-                { icon: 'fa-solid fa-calendar',            label: 'Fecha',    value: new Date(seleccionada.fecha + 'T00:00:00').toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) },
-                { icon: 'fa-solid fa-clock',               label: 'Hora',     value: formatHora(seleccionada.hora) },
-                { icon: 'fa-solid fa-phone',               label: 'Teléfono', value: seleccionada.telefono },
-                { icon: 'fa-solid fa-envelope',            label: 'Correo',   value: seleccionada.correo },
+                { icon: 'fa-solid fa-user',            label: 'Cliente',  value: seleccionada.nombre },
+                { icon: 'fa-solid fa-location-dot',    label: 'Origen',   value: seleccionada.origen },
+                { icon: 'fa-solid fa-flag-checkered',  label: 'Destino',  value: seleccionada.destino },
+                { icon: 'fa-solid fa-calendar',        label: 'Fecha',    value: new Date(seleccionada.fecha + 'T00:00:00').toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) },
+                { icon: 'fa-solid fa-clock',           label: 'Hora',     value: formatHora(seleccionada.hora) },
+                { icon: 'fa-solid fa-phone',           label: 'Teléfono', value: seleccionada.telefono },
+                { icon: 'fa-solid fa-envelope',        label: 'Correo',   value: seleccionada.correo },
+                ...(seleccionada.monto ? [{ icon: 'fa-solid fa-dollar-sign', label: 'Monto', value: `$${seleccionada.monto.toFixed(2)} USD` }] : []),
               ].map(item => (
                 <div key={item.label} className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg border border-slate-100 bg-slate-50 flex items-center justify-center text-[#C5A059] shrink-0">
@@ -338,24 +339,59 @@ export default function AdminReservasPage() {
               ))}
             </div>
 
+            {/* Campo monto — solo visible al confirmar aceptar */}
+            {confirmandoAceptar && (
+              <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+                <label className={labelClass}>Monto del servicio (USD)</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">$</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={montoInput}
+                    onChange={(e) => setMontoInput(e.target.value)}
+                    className={inputClass + ' pl-8'}
+                    autoFocus
+                  />
+                </div>
+                <p className="text-[10px] text-emerald-600 font-medium mt-2">
+                  Este monto se incluirá en el correo de confirmación al cliente.
+                </p>
+              </div>
+            )}
+
             {/* Acciones */}
             <div className="flex gap-3 pt-6 border-t border-slate-100">
               {seleccionada.estado !== 'aceptada' && (
-                <button
-                  onClick={() => cambiarEstado(seleccionada.id, 'aceptada')}
-                  disabled={procesando}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-600 text-xs font-bold uppercase tracking-wider hover:bg-emerald-100 transition disabled:opacity-40"
-                >
-                  {procesando
-                    ? <div className="w-3 h-3 border-2 border-emerald-300 border-t-emerald-600 rounded-full animate-spin" />
-                    : <i className="fa-solid fa-check text-[10px]" />
-                  }
-                  Aceptar
-                </button>
+                <>
+                  {!confirmandoAceptar ? (
+                    <button
+                      onClick={() => setConfirmandoAceptar(true)}
+                      className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-600 text-xs font-bold uppercase tracking-wider hover:bg-emerald-100 transition"
+                    >
+                      <i className="fa-solid fa-check text-[10px]" />
+                      Aceptar
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleAceptar}
+                      disabled={procesando || !montoInput || parseFloat(montoInput) <= 0}
+                      className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-emerald-300 bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider hover:bg-emerald-600 transition disabled:opacity-40"
+                    >
+                      {procesando
+                        ? <div className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                        : <i className="fa-solid fa-paper-plane text-[10px]" />
+                      }
+                      Confirmar y enviar
+                    </button>
+                  )}
+                </>
               )}
               {seleccionada.estado !== 'rechazada' && (
                 <button
-                  onClick={() => cambiarEstado(seleccionada.id, 'rechazada')}
+                  onClick={() => handleRechazar(seleccionada.id)}
                   disabled={procesando}
                   className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-red-200 bg-red-50 text-red-400 text-xs font-bold uppercase tracking-wider hover:bg-red-100 transition disabled:opacity-40"
                 >
@@ -367,10 +403,10 @@ export default function AdminReservasPage() {
                 </button>
               )}
               <button
-                onClick={() => setSeleccionada(null)}
+                onClick={handleCerrarModal}
                 className="px-5 py-3 rounded-lg border border-slate-200 text-slate-500 text-xs font-bold uppercase tracking-wider hover:border-slate-300 transition"
               >
-                Cerrar
+                {confirmandoAceptar ? 'Cancelar' : 'Cerrar'}
               </button>
             </div>
 
