@@ -39,7 +39,7 @@ export default function ReservasSection() {
   const labelClass = "block text-[10px] uppercase font-bold tracking-[0.1em] text-slate-500 mb-2"
 
   return (
-    <section id="reservas" className="bg-slate-50 py-12 scroll-mt-16 relative">
+    <section id="reservas" className="bg-slate-50 pt-8 pb-16 scroll-mt-20 relative">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
 
@@ -89,7 +89,7 @@ export default function ReservasSection() {
           </div>
 
           {/* ── Columna derecha — formulario ── */}
-          <div className="bg-white rounded-2xl border border-slate-100 p-10 md:p-14 shadow-xl">
+          <div className="bg-white rounded-2xl border border-slate-100 p-8 md:p-14 shadow-xl">
 
             {formState === 'success' ? (
               <div className="flex flex-col items-center text-center py-6">

@@ -96,7 +96,7 @@ export default function TestimoniosSection() {
   return (
     <>
       {/* ── Sección principal ── */}
-      <section id="testimonios" className="py-12 bg-white scroll-mt-20">
+<section id="testimonios" className="py-12 bg-white scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
 
           {/* Encabezado */}

@@ -2,7 +2,8 @@ import Image from 'next/image'
 
 export default function MisionSection() {
   return (
-    <section id="mision" className="py-32 bg-white">
+    // Modificación en la línea 5 de MisionSection.tsx
+<section id="mision" className="pt-20 pb-32 bg-white scroll-mt-20">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
 
