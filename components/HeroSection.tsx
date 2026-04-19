@@ -21,8 +21,8 @@ export default function HeroSection() {
             { icon: 'fa-solid fa-user-tie', label: 'Discreto' },
           ].map((item, i) => (
             <React.Fragment key={item.label}>
-              {i > 0 && <div className="w-[1px] h-8 bg-white/20" />}
-              <div className="flex flex-col items-center gap-3 w-[70px] md:w-[90px]">
+              {i > 0 && <div className="w-px h-8 bg-white/20" />}
+              <div className="flex flex-col items-center gap-3 w-[17.5] md:w-[22.5]">
                 <i className={`${item.icon} text-[#C5A059] fa-2x`}></i>
                 <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-white">
                   {item.label}

@@ -12,7 +12,7 @@ export default function MisionSection() {
               src="/airport.jpg"
               alt="Atlanta Airport Service"
               width={800} height={600}
-              className="rounded-xl shadow-xl relative z-10 w-full aspect-[4/3] object-cover"
+              className="rounded-xl shadow-xl relative z-10 w-full aspect-4/3 object-cover"
             />
             <div className="absolute -bottom-8 -right-8 bg-white border border-slate-100 p-8 rounded-xl shadow-xl z-20 hidden md:block">
               <span className="text-5xl font-bold text-[#C5A059] block mb-2 leading-none">24/7</span>
@@ -25,14 +25,14 @@ export default function MisionSection() {
             <h2 className="text-4xl md:text-5xl font-bold mb-8 text-slate-800 leading-tight">
               Un servicio enfocado <br />en el <span className="text-[#C5A059]">detalle.</span>
             </h2>
-            <div className="w-10 h-[2px] bg-[#C5A059] mb-10" />
+            <div className="w-10 h-0.5 bg-[#C5A059] mb-10" />
             <div className="space-y-8 pl-6 border-l-2 border-slate-100">
               <div>
-                <h3 className="text-sm uppercase font-bold tracking-[0.1em] text-slate-900 mb-2">Trato Directo</h3>
+                <h3 className="text-sm uppercase font-bold tracking-widest text-slate-900 mb-2">Trato Directo</h3>
                 <p className="text-slate-500 font-light leading-relaxed text-sm">No trabajamos con choferes aleatorios. Usted trata directamente con el propietario, garantizando un estándar de calidad invariable y sabiendo siempre quién lo recogerá.</p>
               </div>
               <div>
-                <h3 className="text-sm uppercase font-bold tracking-[0.1em] text-slate-900 mb-2">Puntualidad Absoluta</h3>
+                <h3 className="text-sm uppercase font-bold tracking-widest text-slate-900 mb-2">Puntualidad Absoluta</h3>
                 <p className="text-slate-500 font-light leading-relaxed text-sm">Al manejar una agenda exclusiva, programamos cada viaje con amplios márgenes de seguridad para asegurar cero demoras hacia su vuelo o reunión corporativa.</p>
               </div>
             </div>
