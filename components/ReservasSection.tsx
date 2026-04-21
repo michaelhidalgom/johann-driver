@@ -57,7 +57,7 @@ export default function ReservasSection() {
 
             <div className="space-y-6 border-t border-slate-200 pt-8">
               {[
-                { icon: 'fa-solid fa-phone',     text: '+1 (404) 000-0000' },
+                { icon: 'fa-solid fa-phone',     text: '+1 (678) 907-2703' },
                 { icon: 'fa-brands fa-whatsapp', text: 'Atención directa por WhatsApp' },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-4">

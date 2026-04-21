@@ -40,14 +40,14 @@ export default function Footer() {
             <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">Contacto</h5>
             <ul className="space-y-4 text-sm text-slate-600 font-light">
               <li className="flex items-center gap-3">
-                <i className="fa-solid fa-location-dot text-sm text-slate-400"></i>Atlanta, GA & Metro Area
+                <i className="fa-solid fa-location-dot text-sm text-slate-400"></i>Newnan, GA 30263
               </li>
               <li className="flex items-center gap-3">
-                <i className="fa-solid fa-phone text-sm text-slate-400"></i>+1 (404) 000-0000
+                <i className="fa-solid fa-phone text-sm text-slate-400"></i>+1 (678) 907-2703
               </li>
               <li className="flex items-center gap-3">
                 <i className="fa-solid fa-envelope text-sm text-slate-400"></i>
-                <a href="mailto:info@johanndriver.com" className="hover:text-[#C5A059] transition">info@johanndriver.com</a>
+                <a href="mailto:jgpersonaldriver@gmail.com" className="hover:text-[#C5A059] transition">jgpersonaldriver@gmail.com</a>
               </li>
             </ul>
           </div>
