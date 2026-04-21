@@ -126,7 +126,7 @@ export default function TestimoniosSection() {
           {/* Grid de testimonios */}
           {!loadingData && testimonios.length > 0 && (
             <>
-              <div className="grid md:grid-cols-3 gap-5">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
                 {visibles.map((t, i) => (
                   <div
                     key={t.id}

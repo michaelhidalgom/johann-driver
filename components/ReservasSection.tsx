@@ -157,7 +157,7 @@ export default function ReservasSection() {
                   </div>
 
                   {/* Fecha y Hora */}
-                  <div className="grid grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className={labelClass}>Fecha</label>
                       <input
@@ -179,7 +179,7 @@ export default function ReservasSection() {
                   </div>
 
                   {/* Teléfono y Correo */}
-                  <div className="grid grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className={labelClass}>Teléfono</label>
                       <input
