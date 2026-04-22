@@ -14,9 +14,11 @@ export default function ReservasSection() {
   const [correo,   setCorreo]   = useState('')
   const [formState, setFormState] = useState<FormState>('idle')
 
+  const correoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo.trim())
+
   const camposCompletos =
     nombre.trim() && origen.trim() && destino.trim() &&
-    fecha && hora && telefono.trim() && correo.trim()
+    fecha && hora && telefono.trim() && correoValido
 
   async function handleSubmit() {
     if (!camposCompletos) return
@@ -197,8 +199,11 @@ export default function ReservasSection() {
                         placeholder="Ej: cliente@email.com"
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
-                        className={inputClass}
+                        className={inputClass + (!correoValido && correo.trim() ? ' border-red-300 focus:border-red-400 focus:ring-red-400' : '')}
                       />
+                      {!correoValido && correo.trim() && (
+                        <p className="text-[10px] text-red-400 font-medium mt-1.5">Ingrese un correo válido.</p>
+                      )}
                     </div>
                   </div>
 
