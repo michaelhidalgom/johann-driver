@@ -49,6 +49,10 @@ export default function Footer() {
                 <i className="fa-solid fa-envelope text-sm text-slate-400"></i>
                 <a href="mailto:jgpersonaldriver@gmail.com" className="hover:text-[#C5A059] transition">jgpersonaldriver@gmail.com</a>
               </li>
+              <li className="flex items-center gap-3">
+                <i className="fa-solid fa-envelope text-sm text-slate-400"></i>
+                <a href="mailto:johanngarcia@personaldriveratl.com" className="hover:text-[#C5A059] transition">johanngarcia@personaldriveratl.com</a>
+              </li>
             </ul>
           </div>
 
