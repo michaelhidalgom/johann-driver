@@ -31,15 +31,15 @@ export default function HeroSection() {
             </React.Fragment>
           ))}
         </div>
-      </div>
 
-      <div
-        className="hero-scroll"
-        onClick={() => document.querySelector('#mision')?.scrollIntoView({ behavior: 'smooth' })}
-      >
-        <div className="chevron-wrap">
-          <i className="fa-solid fa-chevron-down"></i>
-          <i className="fa-solid fa-chevron-down"></i>
+        <div className="mt-10">
+          <a
+            href="#reservas"
+            onClick={(e) => { e.preventDefault(); document.querySelector('#reservas')?.scrollIntoView({ behavior: 'smooth' }) }}
+            className="inline-block px-10 py-4 rounded text-xs font-bold tracking-[0.22em] uppercase gold-bg text-white hover:bg-amber-600 transition shadow-lg"
+          >
+            Agendar traslado
+          </a>
         </div>
       </div>
     </header>

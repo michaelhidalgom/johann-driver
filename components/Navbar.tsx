@@ -36,8 +36,9 @@ export default function Navbar() {
           ))}
         </div>
 
-        <a href="#reservas" className="hidden md:inline-block px-7 py-2.5 rounded text-xs font-bold tracking-[0.22em] uppercase gold-bg text-white hover:bg-amber-600 transition shadow-md">
-          Reservar Ride
+        <a href="tel:+16789072703" className="hidden md:inline-flex items-center gap-2.5 px-7 py-2.5 rounded text-xs font-bold tracking-[0.15em] uppercase border border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-white transition">
+          <i className="fa-solid fa-phone text-xs"></i>
+          +1 (678) 907-2703
         </a>
 
         <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden text-slate-800 text-2xl focus:outline-none transition-transform duration-300">
@@ -54,8 +55,9 @@ export default function Navbar() {
               </a>
             ))}
             <div className="pt-4 border-t border-slate-100">
-              <a href="#reservas" onClick={() => setMenuOpen(false)} className="inline-block px-8 py-3 rounded text-xs font-bold tracking-[0.22em] uppercase gold-bg text-white hover:bg-amber-600 transition shadow-md">
-                Reservar Ride
+              <a href="tel:+16789072703" onClick={() => setMenuOpen(false)} className="inline-flex items-center gap-2.5 px-8 py-3 rounded text-xs font-bold tracking-[0.15em] uppercase border border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-white transition">
+                <i className="fa-solid fa-phone text-xs"></i>
+                +1 (678) 907-2703
               </a>
             </div>
           </div>
