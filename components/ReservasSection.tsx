@@ -45,22 +45,22 @@ export default function ReservasSection() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
 
-          {/* ── Columna izquierda — info ── */}
+          {/* ── Left column — info ── */}
           <div>
             <span className="text-xs uppercase font-bold tracking-[0.3em] text-[#C5A059] mb-4 block">
-              Reservas Rápidas
+              Quick Bookings
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-8 text-slate-800 leading-tight">
-              Agende su <br /><span className="text-[#C5A059]">traslado</span> hoy.
+              Schedule your <br /><span className="text-[#C5A059]">transfer</span> today.
             </h2>
             <p className="text-slate-500 font-light leading-relaxed text-sm mb-12 max-w-md">
-              Complete los detalles de su viaje. Confirmación directa vía WhatsApp, sin intermediarios ni algoritmos.
+              Fill in your trip details. Direct confirmation via WhatsApp, no middlemen or algorithms.
             </p>
 
             <div className="space-y-6 border-t border-slate-200 pt-8">
               {[
                 { icon: 'fa-solid fa-phone',     text: '+1 (678) 907-2703' },
-                { icon: 'fa-brands fa-whatsapp', text: 'Atención directa por WhatsApp' },
+                { icon: 'fa-brands fa-whatsapp', text: 'Direct support via WhatsApp' },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-lg border border-slate-200 bg-white flex items-center justify-center text-[#C5A059] shadow-sm">
@@ -73,12 +73,12 @@ export default function ReservasSection() {
 
             <div className="mt-10 pt-8 border-t border-slate-200">
               <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 mb-4 block">
-                Opciones de pago aceptadas
+                Accepted payment options
               </span>
               <div className="flex flex-wrap items-center gap-6">
                 {[
-                  { icon: 'fa-solid fa-money-bill-1-wave',    label: 'Efectivo' },
-                  { icon: 'fa-solid fa-credit-card',          label: 'Tarjeta' },
+                  { icon: 'fa-solid fa-money-bill-1-wave',    label: 'Cash' },
+                  { icon: 'fa-solid fa-credit-card',          label: 'Card' },
                   { icon: 'fa-solid fa-mobile-screen-button', label: 'Zelle / App' },
                 ].map((p) => (
                   <div key={p.label} className="flex items-center gap-2 text-slate-600 font-medium text-sm">
@@ -90,7 +90,7 @@ export default function ReservasSection() {
             </div>
           </div>
 
-          {/* ── Columna derecha — formulario ── */}
+          {/* ── Right column — form ── */}
           <div className="bg-white rounded-2xl border border-slate-100 p-8 md:p-14 shadow-xl">
 
             {formState === 'success' ? (
@@ -99,69 +99,69 @@ export default function ReservasSection() {
                   <i className="fa-solid fa-check text-[#C5A059] text-2xl" />
                 </div>
                 <span className="text-xs uppercase font-bold tracking-[0.3em] text-[#C5A059] mb-3 block">
-                  ¡Recibida!
+                  Received!
                 </span>
-                <h3 className="text-2xl font-bold text-slate-800 mb-2">Pre-Reserva enviada</h3>
+                <h3 className="text-2xl font-bold text-slate-800 mb-2">Booking Request Sent</h3>
                 <p className="text-sm font-light text-slate-500 leading-relaxed mb-8">
-                  Revisaremos su solicitud y nos<br />pondremos en contacto a la brevedad.
+                  We'll review your request and<br />get back to you shortly.
                 </p>
                 <button
                   onClick={handleReset}
                   className="px-10 py-3 rounded border border-slate-200 text-xs font-bold uppercase tracking-[0.2em] text-slate-500 hover:border-[#C5A059] hover:text-[#C5A059] transition"
                 >
-                  Nueva Pre-Reserva
+                  New Booking Request
                 </button>
               </div>
 
             ) : (
               <>
-                <h3 className="text-2xl font-bold text-slate-800 mb-2">Pre-Reserva</h3>
+                <h3 className="text-2xl font-bold text-slate-800 mb-2">Pre-Booking</h3>
                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-slate-400 mb-8">
-                  Confirmación humana inmediata
+                  Immediate human confirmation
                 </p>
 
                 <div className="space-y-5">
 
-                  {/* Nombre */}
+                  {/* Full Name */}
                   <div>
-                    <label className={labelClass}>Nombre Completo</label>
+                    <label className={labelClass}>Full Name</label>
                     <input
                       type="text"
-                      placeholder="Ej: Carlos Reyes"
+                      placeholder="E.g.: John Smith"
                       value={nombre}
                       onChange={(e) => setNombre(e.target.value)}
                       className={inputClass}
                     />
                   </div>
 
-                  {/* Origen */}
+                  {/* Pickup */}
                   <div>
-                    <label className={labelClass}>Punto de Recogida</label>
+                    <label className={labelClass}>Pickup Location</label>
                     <input
                       type="text"
-                      placeholder="Ej: Hartsfield-Jackson Intl Airport"
+                      placeholder="E.g.: Hartsfield-Jackson Intl Airport"
                       value={origen}
                       onChange={(e) => setOrigen(e.target.value)}
                       className={inputClass}
                     />
                   </div>
 
-                  {/* Destino */}
+                  {/* Destination */}
                   <div>
-                    <label className={labelClass}>Destino Final</label>
+                    <label className={labelClass}>Final Destination</label>
                     <input
                       type="text"
-                      placeholder="Ej: Downtown Atlanta Hotel"
+                      placeholder="E.g.: Downtown Atlanta Hotel"
                       value={destino}
                       onChange={(e) => setDestino(e.target.value)}
                       className={inputClass}
                     />
                   </div>
 
-                  {/* Fecha y Hora */}
+                  {/* Date & Time */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className={labelClass}>Fecha</label>
+                      <label className={labelClass}>Date</label>
                       <input
                         type="date"
                         value={fecha}
@@ -170,7 +170,7 @@ export default function ReservasSection() {
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Hora</label>
+                      <label className={labelClass}>Time</label>
                       <input
                         type="time"
                         value={hora}
@@ -180,29 +180,29 @@ export default function ReservasSection() {
                     </div>
                   </div>
 
-                  {/* Teléfono y Correo */}
+                  {/* Phone & Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className={labelClass}>Teléfono</label>
+                      <label className={labelClass}>Phone</label>
                       <input
                         type="tel"
-                        placeholder="Ej: +1 (404) 000-0000"
+                        placeholder="E.g.: +1 (404) 000-0000"
                         value={telefono}
                         onChange={(e) => setTelefono(e.target.value)}
                         className={inputClass}
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Correo</label>
+                      <label className={labelClass}>Email</label>
                       <input
                         type="email"
-                        placeholder="Ej: cliente@email.com"
+                        placeholder="E.g.: client@email.com"
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
                         className={inputClass + (!correoValido && correo.trim() ? ' border-red-300 focus:border-red-400 focus:ring-red-400' : '')}
                       />
                       {!correoValido && correo.trim() && (
-                        <p className="text-[10px] text-red-400 font-medium mt-1.5">Ingrese un correo válido.</p>
+                        <p className="text-[10px] text-red-400 font-medium mt-1.5">Please enter a valid email.</p>
                       )}
                     </div>
                   </div>
@@ -212,12 +212,12 @@ export default function ReservasSection() {
                     <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-lg px-4 py-3">
                       <i className="fa-solid fa-circle-exclamation text-red-400 text-xs" />
                       <p className="text-xs text-red-500 font-medium">
-                        Ocurrió un error. Por favor intente nuevamente.
+                        An error occurred. Please try again.
                       </p>
                     </div>
                   )}
 
-                  {/* Botón */}
+                  {/* Button */}
                   <button
                     onClick={handleSubmit}
                     disabled={!camposCompletos || formState === 'loading'}
@@ -226,10 +226,10 @@ export default function ReservasSection() {
                     {formState === 'loading' ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                        Enviando...
+                        Sending...
                       </>
                     ) : (
-                      'Confirmar Pre-Reserva'
+                      'Confirm Booking'
                     )}
                   </button>
 

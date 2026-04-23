@@ -8,7 +8,7 @@ export default function Footer() {
             <div className="mb-8">
               <span className="block text-xs font-bold tracking-[0.15em] uppercase gold-text mb-3">Johann Garcia Personal Driver LLC</span>
               <p className="text-sm text-slate-500 max-w-sm leading-relaxed font-light">
-                Su aliado estratégico en las carreteras de Atlanta.<br />Servicio ejecutivo con puntualidad, seguridad y discreción.
+                Your strategic partner on Atlanta's roads.<br />Executive service with punctuality, safety, and discretion.
               </p>
             </div>
             <div className="flex gap-3">
@@ -21,10 +21,10 @@ export default function Footer() {
           </div>
 
           <div>
-            <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">Formas de Pago</h5>
+            <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">Payment Methods</h5>
             <ul className="space-y-4">
               {[
-                { icon: 'fa-solid fa-money-bill-1-wave', label: 'Cash (Efectivo)' },
+                { icon: 'fa-solid fa-money-bill-1-wave', label: 'Cash' },
                 { icon: 'fa-solid fa-credit-card', label: 'Credit Card' },
                 { icon: 'fa-solid fa-mobile-screen-button', label: 'Zelle / Cash App' },
               ].map((p) => (
@@ -37,7 +37,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">Contacto</h5>
+            <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">Contact</h5>
             <ul className="space-y-4 text-sm text-slate-600 font-light">
               <li className="flex items-center gap-3">
                 <i className="fa-solid fa-location-dot text-sm text-slate-400"></i>Newnan, GA 30263
@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center text-slate-400 text-[10px] uppercase tracking-[0.1em] font-bold gap-3">
           <span>©2026 Johann Garcia Personal Driver LLC — Atlanta, GA</span>
-          <span>Puntualidad · Seguridad · Discreción</span>
+          <span>Punctuality · Safety · Discretion</span>
         </div>
       </div>
     </footer>

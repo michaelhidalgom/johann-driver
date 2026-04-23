@@ -7,10 +7,10 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const links = [
-    { href: '#inicio', label: 'Inicio' },
-    { href: '#mision', label: 'Ventajas' },
-    { href: '#reservas', label: 'Reservas' },
-    { href: '#testimonios', label: 'Opiniones' },
+    { href: '#inicio', label: 'Home' },
+    { href: '#mision', label: 'Advantages' },
+    { href: '#reservas', label: 'Bookings' },
+    { href: '#testimonios', label: 'Reviews' },
   ]
 
   return (
