@@ -61,6 +61,7 @@ export default function ReservasSection() {
               {[
                 { icon: 'fa-solid fa-phone',     text: '+1 (678) 907-2703' },
                 { icon: 'fa-brands fa-whatsapp', text: 'Direct support via WhatsApp' },
+                { icon: 'fa-solid fa-envelope',  text: 'johanngarcia@personaldriveratl.com' },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-lg border border-slate-200 bg-white flex items-center justify-center text-[#C5A059] shadow-sm">
@@ -78,12 +79,15 @@ export default function ReservasSection() {
               <div className="flex flex-wrap items-center gap-6">
                 {[
                   { icon: 'fa-solid fa-money-bill-1-wave',    label: 'Cash' },
-                  { icon: 'fa-solid fa-credit-card',          label: 'Card' },
+                  { icon: 'fa-solid fa-credit-card',          label: 'Card', note: '+3% fee' },
                   { icon: 'fa-solid fa-mobile-screen-button', label: 'Zelle / App' },
                 ].map((p) => (
                   <div key={p.label} className="flex items-center gap-2 text-slate-600 font-medium text-sm">
                     <i className={`${p.icon} text-[#C5A059]`} />
                     {p.label}
+                    {'note' in p && (
+                      <span className="text-[10px] font-bold tracking-wide text-slate-400">{p.note}</span>
+                    )}
                   </div>
                 ))}
               </div>
