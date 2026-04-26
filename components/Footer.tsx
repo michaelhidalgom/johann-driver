@@ -1,4 +1,8 @@
-export default function Footer() {
+import type { Dictionary } from '@/lib/dictionary'
+
+type Props = { dict: Dictionary['footer'] }
+
+export default function Footer({ dict }: Props) {
   return (
     <footer className="bg-slate-100 pt-20 pb-10 border-t border-slate-200">
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
@@ -8,7 +12,7 @@ export default function Footer() {
             <div className="mb-8">
               <span className="block text-xs font-bold tracking-[0.15em] uppercase gold-text mb-3">Johann Garcia Personal Driver LLC</span>
               <p className="text-sm text-slate-500 max-w-sm leading-relaxed font-light">
-                Your strategic partner on Atlanta's roads.<br />Executive service with punctuality, safety, and discretion.
+                {dict.tagline}
               </p>
             </div>
             <div className="flex gap-3">
@@ -21,12 +25,12 @@ export default function Footer() {
           </div>
 
           <div>
-            <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">Payment Methods</h5>
+            <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">{dict.payment_title}</h5>
             <ul className="space-y-4">
               {[
-                { icon: 'fa-solid fa-money-bill-1-wave', label: 'Cash' },
-                { icon: 'fa-solid fa-credit-card', label: 'Credit Card' },
-                { icon: 'fa-solid fa-mobile-screen-button', label: 'Zelle / Cash App' },
+                { icon: 'fa-solid fa-money-bill-1-wave', label: dict.cash },
+                { icon: 'fa-solid fa-credit-card',       label: dict.card },
+                { icon: 'fa-solid fa-mobile-screen-button', label: dict.zelle },
               ].map((p) => (
                 <li key={p.label} className="flex items-center gap-3 text-slate-600 font-light text-sm">
                   <i className={`${p.icon} text-lg text-slate-400`}></i>
@@ -37,7 +41,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">Contact</h5>
+            <h5 className="font-bold text-[#C5A059] uppercase tracking-[0.2em] mb-7 text-xs">{dict.contact_title}</h5>
             <ul className="space-y-4 text-sm text-slate-600 font-light">
               <li className="flex items-center gap-3">
                 <i className="fa-solid fa-location-dot text-sm text-slate-400"></i>Newnan, GA 30263
@@ -58,8 +62,8 @@ export default function Footer() {
 
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center text-slate-400 text-[10px] uppercase tracking-[0.1em] font-bold gap-3">
-          <span>©2026 Johann Garcia Personal Driver LLC — Atlanta, GA</span>
-          <span>Punctuality · Safety · Discretion</span>
+          <span>{dict.copyright}</span>
+          <span>{dict.motto}</span>
         </div>
       </div>
     </footer>
