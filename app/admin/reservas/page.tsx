@@ -63,6 +63,7 @@ export default function AdminReservasPage() {
   // Estado para el flujo de aceptar con monto
   const [confirmandoAceptar, setConfirmandoAceptar] = useState(false)
   const [montoInput, setMontoInput] = useState('')
+  const [confirmandoEliminar, setConfirmandoEliminar] = useState(false)
 
   // ── Cargar datos ──
   useEffect(() => {
@@ -117,10 +118,21 @@ export default function AdminReservasPage() {
     setProcesando(false)
   }
 
+  // ── Eliminar pre-reserva ──
+  async function handleEliminar(id: number) {
+    setProcesando(true)
+    await supabase.from('prereservas').delete().eq('id', id)
+    setPrereservas(prev => prev.filter(p => p.id !== id))
+    setSeleccionada(null)
+    setConfirmandoEliminar(false)
+    setProcesando(false)
+  }
+
   // ── Cerrar modal ──
   function handleCerrarModal() {
     setSeleccionada(null)
     setConfirmandoAceptar(false)
+    setConfirmandoEliminar(false)
     setMontoInput('')
   }
 
@@ -402,11 +414,33 @@ export default function AdminReservasPage() {
                   Rechazar
                 </button>
               )}
+              {confirmandoEliminar ? (
+                <button
+                  onClick={() => handleEliminar(seleccionada.id)}
+                  disabled={procesando}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-slate-700 bg-slate-800 text-white text-xs font-bold uppercase tracking-wider hover:bg-slate-900 transition disabled:opacity-40"
+                >
+                  {procesando
+                    ? <div className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    : <i className="fa-solid fa-trash text-[10px]" />
+                  }
+                  Confirmar
+                </button>
+              ) : (
+                <button
+                  onClick={() => setConfirmandoEliminar(true)}
+                  disabled={procesando}
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-slate-200 text-slate-400 text-xs font-bold uppercase tracking-wider hover:border-slate-300 hover:text-slate-600 transition disabled:opacity-40"
+                >
+                  <i className="fa-solid fa-trash text-[10px]" />
+                  Eliminar
+                </button>
+              )}
               <button
                 onClick={handleCerrarModal}
                 className="px-5 py-3 rounded-lg border border-slate-200 text-slate-500 text-xs font-bold uppercase tracking-wider hover:border-slate-300 transition"
               >
-                {confirmandoAceptar ? 'Cancelar' : 'Cerrar'}
+                {confirmandoAceptar || confirmandoEliminar ? 'Cancelar' : 'Cerrar'}
               </button>
             </div>
 
