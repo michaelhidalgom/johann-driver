@@ -49,6 +49,7 @@ export default function AdminPage() {
   const [tab, setTab]                 = useState<Tab>('pendiente')
   const [userEmail, setUserEmail]     = useState('')
   const [procesando, setProcesando]   = useState<number | null>(null)
+  const [confirmEliminar, setConfirmEliminar] = useState<number | null>(null)
 
   // ── Cargar sesión y datos ──
   useEffect(() => {
@@ -85,6 +86,15 @@ export default function AdminPage() {
     setProcesando(null)
   }
 
+  // ── Eliminar testimonio ──
+  async function eliminarTestimonio(id: number) {
+    setProcesando(id)
+    await supabase.from('testimonios').delete().eq('id', id)
+    setTestimonios(prev => prev.filter(t => t.id !== id))
+    setConfirmEliminar(null)
+    setProcesando(null)
+  }
+
   // ── Cerrar sesión ──
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -110,7 +120,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-3">
             <span className="font-bold text-sm tracking-wide">JOHANN DRIVER</span>
             <span className="text-slate-500 text-xs">—</span>
-            <span className="text-slate-400 text-xs uppercase tracking-[0.15em]">Panel de administración</span>
+            <span className="text-slate-400 text-xs uppercase tracking-[0.15em]">Testimonios</span>
           </div>
           <div className="flex items-center gap-6">
             <a
@@ -243,6 +253,36 @@ export default function AdminPage() {
                           : <i className="fa-solid fa-xmark text-[10px]" />
                         }
                         Rechazar
+                      </button>
+                    )}
+                    {confirmEliminar === t.id ? (
+                      <div className="flex gap-1.5">
+                        <button
+                          onClick={() => eliminarTestimonio(t.id)}
+                          disabled={procesando === t.id}
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 text-white text-xs font-bold uppercase tracking-wider hover:bg-slate-900 transition disabled:opacity-40"
+                        >
+                          {procesando === t.id
+                            ? <div className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                            : <i className="fa-solid fa-trash text-[10px]" />
+                          }
+                          Confirmar
+                        </button>
+                        <button
+                          onClick={() => setConfirmEliminar(null)}
+                          className="px-3 py-2 rounded-lg border border-slate-200 text-slate-500 text-xs font-bold uppercase tracking-wider hover:border-slate-300 transition"
+                        >
+                          No
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setConfirmEliminar(t.id)}
+                        disabled={procesando === t.id}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-200 bg-white text-slate-400 text-xs font-bold uppercase tracking-wider hover:border-slate-300 hover:text-slate-600 transition disabled:opacity-40"
+                      >
+                        <i className="fa-solid fa-trash text-[10px]" />
+                        Eliminar
                       </button>
                     )}
                   </div>

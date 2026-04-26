@@ -14,7 +14,7 @@ serve(async (req) => {
     }
 
     // Formatear fecha
-    const fecha = new Date(reserva.fecha + 'T00:00:00').toLocaleDateString('es-ES', {
+    const fecha = new Date(reserva.fecha + 'T00:00:00').toLocaleDateString('en-US', {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     })
 
@@ -37,7 +37,7 @@ serve(async (req) => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Confirmación de Pre-Reserva</title>
+  <title>Booking Confirmation</title>
 </head>
 <body style="margin:0;padding:0;background:#f1f5f9;font-family:'Helvetica Neue',Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 16px;">
@@ -52,57 +52,57 @@ serve(async (req) => {
                 Johann Garcia Personal Driver LLC
               </p>
               <p style="margin:6px 0 0;font-size:22px;font-weight:700;color:#ffffff;">
-                Pre-Reserva Confirmada
+                Booking Confirmed
               </p>
             </td>
           </tr>
 
-          <!-- Saludo -->
+          <!-- Greeting -->
           <tr>
             <td style="padding:32px 40px 0;">
               <p style="margin:0;font-size:15px;color:#334155;line-height:1.7;">
-                Estimado/a <strong>${nombreCliente}</strong>,
+                Dear <strong>${nombreCliente}</strong>,
               </p>
               <p style="margin:12px 0 0;font-size:14px;color:#64748b;line-height:1.7;font-weight:300;">
-                Nos complace confirmar que su pre-reserva ha sido <strong style="color:#10b981;">aceptada</strong>.
-                A continuación encontrará el resumen de su traslado:
+                We are pleased to confirm that your booking has been <strong style="color:#10b981;">accepted</strong>.
+                Below you will find a summary of your ride:
               </p>
             </td>
           </tr>
 
-          <!-- Detalles -->
+          <!-- Details -->
           <tr>
             <td style="padding:24px 40px;">
               <table width="100%" cellpadding="0" cellspacing="0"
                 style="background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;">
                 <tr>
                   <td style="padding:16px 20px;border-bottom:1px solid #e2e8f0;">
-                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Origen</p>
+                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Pickup</p>
                     <p style="margin:4px 0 0;font-size:14px;color:#1e293b;font-weight:600;">${reserva.origen}</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:16px 20px;border-bottom:1px solid #e2e8f0;">
-                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Destino</p>
+                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Drop-off</p>
                     <p style="margin:4px 0 0;font-size:14px;color:#1e293b;font-weight:600;">${reserva.destino}</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:16px 20px;border-bottom:1px solid #e2e8f0;">
-                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Fecha</p>
+                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Date</p>
                     <p style="margin:4px 0 0;font-size:14px;color:#1e293b;font-weight:600;">${fecha}</p>
                   </td>
                 </tr>
                 <tr>
                   <td style="padding:16px 20px;${montoFormateado ? 'border-bottom:1px solid #e2e8f0;' : ''}">
-                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Hora</p>
+                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Time</p>
                     <p style="margin:4px 0 0;font-size:14px;color:#1e293b;font-weight:600;">${hora}</p>
                   </td>
                 </tr>
                 ${montoFormateado ? `
                 <tr>
                   <td style="padding:16px 20px;background:#f0fdf4;">
-                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Monto del Servicio</p>
+                    <p style="margin:0;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#94a3b8;font-weight:700;">Service Fee</p>
                     <p style="margin:4px 0 0;font-size:18px;color:#10b981;font-weight:700;">${montoFormateado}</p>
                   </td>
                 </tr>` : ''}
@@ -110,12 +110,12 @@ serve(async (req) => {
             </td>
           </tr>
 
-          <!-- Nota -->
+          <!-- Note -->
           <tr>
             <td style="padding:0 40px 32px;">
               <p style="margin:0;font-size:13px;color:#64748b;line-height:1.7;font-weight:300;">
-                En breve nos pondremos en contacto con usted al número
-                <strong style="color:#1e293b;">${reserva.telefono}</strong> para coordinar los detalles finales.
+                We will reach out to you shortly at
+                <strong style="color:#1e293b;">${reserva.telefono}</strong> to coordinate the final details.
               </p>
             </td>
           </tr>
@@ -132,7 +132,7 @@ serve(async (req) => {
             <td style="padding:24px 40px;">
               <p style="margin:0;font-size:12px;color:#94a3b8;line-height:1.7;">
                 Johann Garcia Personal Driver LLC · Atlanta, GA & Metro Area<br/>
-                Puntualidad · Seguridad · Discreción
+                Punctuality · Safety · Discretion
               </p>
             </td>
           </tr>
@@ -153,7 +153,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from:    `${FROM_NAME} <${FROM_EMAIL}>`,
         to:      [reserva.correo],
-        subject: `✅ Pre-Reserva Confirmada — ${fecha} a las ${hora}`,
+        subject: `✅ Booking Confirmed — ${fecha} at ${hora}`,
         html,
       }),
     })

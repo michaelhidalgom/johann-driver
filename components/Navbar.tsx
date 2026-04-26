@@ -2,22 +2,30 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Dictionary } from '@/lib/dictionary'
 
-export default function Navbar() {
+type Props = {
+  dict: Dictionary['navbar']
+  lang: string
+}
+
+export default function Navbar({ dict, lang }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const links = [
-    { href: '#inicio', label: 'Home' },
-    { href: '#mision', label: 'Advantages' },
-    { href: '#reservas', label: 'Bookings' },
-    { href: '#testimonios', label: 'Reviews' },
+    { href: '#inicio',      label: dict.home },
+    { href: '#mision',      label: dict.advantages },
+    { href: '#reservas',    label: dict.bookings },
+    { href: '#testimonios', label: dict.reviews },
   ]
+
+  const otherLang = lang === 'en' ? 'es' : 'en'
 
   return (
     <nav className="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-black/5">
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex justify-between items-center">
 
-        <Link href="#inicio" className="flex items-center gap-3.5">
+        <Link href={`/${lang}`} className="flex items-center gap-3.5">
           <Image
             src="/logo.png"
             alt="Johann Driver Logo"
@@ -36,10 +44,18 @@ export default function Navbar() {
           ))}
         </div>
 
-        <a href="tel:+16789072703" className="hidden md:inline-flex items-center gap-2.5 px-7 py-2.5 rounded text-xs font-bold tracking-[0.15em] uppercase border border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-white transition">
-          <i className="fa-solid fa-phone text-xs"></i>
-          +1 (678) 907-2703
-        </a>
+        <div className="hidden md:flex items-center gap-4">
+          <Link
+            href={`/${otherLang}`}
+            className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 hover:text-[#C5A059] transition"
+          >
+            {otherLang}
+          </Link>
+          <a href="tel:+16789072703" className="inline-flex items-center gap-2.5 px-7 py-2.5 rounded text-xs font-bold tracking-[0.15em] uppercase border border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-white transition">
+            <i className="fa-solid fa-phone text-xs"></i>
+            +1 (678) 907-2703
+          </a>
+        </div>
 
         <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden text-slate-800 text-2xl focus:outline-none transition-transform duration-300">
           <i className={`fa-solid ${menuOpen ? 'fa-xmark' : 'fa-bars'}`}></i>
@@ -54,7 +70,14 @@ export default function Navbar() {
                 {l.label}
               </a>
             ))}
-            <div className="pt-4 border-t border-slate-100">
+            <div className="pt-4 border-t border-slate-100 flex flex-col items-center gap-4">
+              <Link
+                href={`/${otherLang}`}
+                onClick={() => setMenuOpen(false)}
+                className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 hover:text-[#C5A059] transition"
+              >
+                {otherLang === 'en' ? '🇺🇸 English' : '🇪🇸 Español'}
+              </Link>
               <a href="tel:+16789072703" onClick={() => setMenuOpen(false)} className="inline-flex items-center gap-2.5 px-8 py-3 rounded text-xs font-bold tracking-[0.15em] uppercase border border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-white transition">
                 <i className="fa-solid fa-phone text-xs"></i>
                 +1 (678) 907-2703

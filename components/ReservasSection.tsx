@@ -1,10 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import type { Dictionary } from '@/lib/dictionary'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
+type Props = { dict: Dictionary['reservas'] }
 
-export default function ReservasSection() {
+export default function ReservasSection({ dict }: Props) {
   const [nombre,   setNombre]   = useState('')
   const [origen,   setOrigen]   = useState('')
   const [destino,  setDestino]  = useState('')
@@ -48,19 +50,19 @@ export default function ReservasSection() {
           {/* ── Left column — info ── */}
           <div>
             <span className="text-xs uppercase font-bold tracking-[0.3em] text-[#C5A059] mb-4 block">
-              Quick Bookings
+              {dict.badge}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-8 text-slate-800 leading-tight">
-              Schedule your <br /><span className="text-[#C5A059]">transfer</span> today.
+              {dict.heading1} <br /><span className="text-[#C5A059]">{dict.heading2}</span> {dict.heading3}
             </h2>
             <p className="text-slate-500 font-light leading-relaxed text-sm mb-12 max-w-md">
-              Fill in your trip details. Direct confirmation via WhatsApp, no middlemen or algorithms.
+              {dict.subtitle}
             </p>
 
             <div className="space-y-6 border-t border-slate-200 pt-8">
               {[
                 { icon: 'fa-solid fa-phone',     text: '+1 (678) 907-2703' },
-                { icon: 'fa-brands fa-whatsapp', text: 'Direct support via WhatsApp' },
+                { icon: 'fa-brands fa-whatsapp', text: dict.whatsapp },
                 { icon: 'fa-solid fa-envelope',  text: 'johanngarcia@personaldriveratl.com' },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-4">
@@ -74,18 +76,18 @@ export default function ReservasSection() {
 
             <div className="mt-10 pt-8 border-t border-slate-200">
               <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-slate-400 mb-4 block">
-                Accepted payment options
+                {dict.payment_title}
               </span>
               <div className="flex flex-wrap items-center gap-6">
                 {[
-                  { icon: 'fa-solid fa-money-bill-1-wave',    label: 'Cash' },
-                  { icon: 'fa-solid fa-credit-card',          label: 'Card', note: '+3% fee' },
-                  { icon: 'fa-solid fa-mobile-screen-button', label: 'Zelle / App' },
+                  { icon: 'fa-solid fa-money-bill-1-wave',    label: dict.cash },
+                  { icon: 'fa-solid fa-credit-card',          label: dict.card, note: dict.card_note },
+                  { icon: 'fa-solid fa-mobile-screen-button', label: dict.zelle },
                 ].map((p) => (
                   <div key={p.label} className="flex items-center gap-2 text-slate-600 font-medium text-sm">
                     <i className={`${p.icon} text-[#C5A059]`} />
                     {p.label}
-                    {'note' in p && (
+                    {'note' in p && p.note && (
                       <span className="text-[10px] font-bold tracking-wide text-slate-400">{p.note}</span>
                     )}
                   </div>
@@ -103,69 +105,65 @@ export default function ReservasSection() {
                   <i className="fa-solid fa-check text-[#C5A059] text-2xl" />
                 </div>
                 <span className="text-xs uppercase font-bold tracking-[0.3em] text-[#C5A059] mb-3 block">
-                  Received!
+                  {dict.success_badge}
                 </span>
-                <h3 className="text-2xl font-bold text-slate-800 mb-2">Booking Request Sent</h3>
+                <h3 className="text-2xl font-bold text-slate-800 mb-2">{dict.success_title}</h3>
                 <p className="text-sm font-light text-slate-500 leading-relaxed mb-8">
-                  We'll review your request and<br />get back to you shortly.
+                  {dict.success_text}
                 </p>
                 <button
                   onClick={handleReset}
                   className="px-10 py-3 rounded border border-slate-200 text-xs font-bold uppercase tracking-[0.2em] text-slate-500 hover:border-[#C5A059] hover:text-[#C5A059] transition"
                 >
-                  New Booking Request
+                  {dict.new_booking}
                 </button>
               </div>
 
             ) : (
               <>
-                <h3 className="text-2xl font-bold text-slate-800 mb-2">Pre-Booking</h3>
+                <h3 className="text-2xl font-bold text-slate-800 mb-2">{dict.form_title}</h3>
                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-slate-400 mb-8">
-                  Immediate human confirmation
+                  {dict.form_subtitle}
                 </p>
 
                 <div className="space-y-5">
 
-                  {/* Full Name */}
                   <div>
-                    <label className={labelClass}>Full Name</label>
+                    <label className={labelClass}>{dict.name}</label>
                     <input
                       type="text"
-                      placeholder="E.g.: John Smith"
+                      placeholder={dict.name_placeholder}
                       value={nombre}
                       onChange={(e) => setNombre(e.target.value)}
                       className={inputClass}
                     />
                   </div>
 
-                  {/* Pickup */}
                   <div>
-                    <label className={labelClass}>Pickup Location</label>
+                    <label className={labelClass}>{dict.pickup}</label>
                     <input
                       type="text"
-                      placeholder="E.g.: Hartsfield-Jackson Intl Airport"
+                      placeholder={dict.pickup_placeholder}
                       value={origen}
                       onChange={(e) => setOrigen(e.target.value)}
                       className={inputClass}
                     />
                   </div>
 
-                  {/* Destination */}
                   <div>
-                    <label className={labelClass}>Final Destination</label>
+                    <label className={labelClass}>{dict.destination}</label>
                     <input
                       type="text"
-                      placeholder="E.g.: Downtown Atlanta Hotel"
+                      placeholder={dict.destination_placeholder}
                       value={destino}
                       onChange={(e) => setDestino(e.target.value)}
                       className={inputClass}
                     />
                   </div>
 
-                  {/* Date & Time */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className={labelClass}>Date</label>
+                      <label className={labelClass}>{dict.date}</label>
                       <input
                         type="date"
                         value={fecha}
@@ -174,7 +172,7 @@ export default function ReservasSection() {
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Time</label>
+                      <label className={labelClass}>{dict.time}</label>
                       <input
                         type="time"
                         value={hora}
@@ -184,44 +182,39 @@ export default function ReservasSection() {
                     </div>
                   </div>
 
-                  {/* Phone & Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className={labelClass}>Phone</label>
+                      <label className={labelClass}>{dict.phone}</label>
                       <input
                         type="tel"
-                        placeholder="E.g.: +1 (404) 000-0000"
+                        placeholder={dict.phone_placeholder}
                         value={telefono}
                         onChange={(e) => setTelefono(e.target.value)}
                         className={inputClass}
                       />
                     </div>
                     <div>
-                      <label className={labelClass}>Email</label>
+                      <label className={labelClass}>{dict.email}</label>
                       <input
                         type="email"
-                        placeholder="E.g.: client@email.com"
+                        placeholder={dict.email_placeholder}
                         value={correo}
                         onChange={(e) => setCorreo(e.target.value)}
                         className={inputClass + (!correoValido && correo.trim() ? ' border-red-300 focus:border-red-400 focus:ring-red-400' : '')}
                       />
                       {!correoValido && correo.trim() && (
-                        <p className="text-[10px] text-red-400 font-medium mt-1.5">Please enter a valid email.</p>
+                        <p className="text-[10px] text-red-400 font-medium mt-1.5">{dict.email_error}</p>
                       )}
                     </div>
                   </div>
 
-                  {/* Error */}
                   {formState === 'error' && (
                     <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-lg px-4 py-3">
                       <i className="fa-solid fa-circle-exclamation text-red-400 text-xs" />
-                      <p className="text-xs text-red-500 font-medium">
-                        An error occurred. Please try again.
-                      </p>
+                      <p className="text-xs text-red-500 font-medium">{dict.error}</p>
                     </div>
                   )}
 
-                  {/* Button */}
                   <button
                     onClick={handleSubmit}
                     disabled={!camposCompletos || formState === 'loading'}
@@ -230,10 +223,10 @@ export default function ReservasSection() {
                     {formState === 'loading' ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                        Sending...
+                        {dict.sending}
                       </>
                     ) : (
-                      'Confirm Booking'
+                      dict.submit
                     )}
                   </button>
 
