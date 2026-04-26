@@ -120,7 +120,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-3">
             <span className="font-bold text-sm tracking-wide">JOHANN DRIVER</span>
             <span className="text-slate-500 text-xs">—</span>
-            <span className="text-slate-400 text-xs uppercase tracking-[0.15em]">Panel de administración</span>
+            <span className="text-slate-400 text-xs uppercase tracking-[0.15em]">Testimonios</span>
           </div>
           <div className="flex items-center gap-6">
             <a
